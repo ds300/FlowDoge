@@ -50,6 +50,10 @@ function clearOldTokenRequests(threshold: number = MAX_REQUEST_LIFETIME): void {
     if (now - request.createdAt > threshold) {
       delete tokenRequests[state]
       numTokenRequests--
+      if (request.response) {
+        request.response.status(408)
+        request.response.end()
+      }
     }
   }
   if (numTokenRequests === 0 && tokenRequestClearerInterval !== null) {
@@ -132,6 +136,8 @@ app.get("/token", (req, res) => {
   if (typeof state === "string" && state.match(/[a-z0-9]{32}/i)) {
     addTokenRequest(state, res, null)
   } else {
+    /* tslint:disable-next-line */
+    console.log("/token bad state", state)
     res.status(400)
     res.end()
   }
@@ -145,6 +151,8 @@ app.get("/login", (req, res) => {
   }
 
   if (!(typeof state === "string" && typeof code === "string")) {
+    /* tslint:disable-next-line */
+    console.log("/login bad params", req.params)
     res.status(400)
     res.end()
     return
@@ -164,11 +172,18 @@ app.get("/login", (req, res) => {
       "Content-Type": "application/json",
     },
   })
-    .then(response => response && response.json())
-    .then(body => {
-      if (typeof body.access_token === "string") {
-        // assume all is well
-        handleAccessToken(state, body as AccessToken)
+    .then(response => {
+      if (response.status === 200) {
+        response.json().then(token => handleAccessToken(state, token))
+        res.end("Thanks for logging into Flowdoge. You can close this now.")
+      } else {
+        res.end(
+          "Errmmm, not sure what happened, but that didn't work. Maybe try again?",
+        )
+        response.text().then(text => {
+          /* tslint:disable-next-line */
+          console.log("bad response", response.status, text)
+        })
       }
     })
     .catch(e => {
