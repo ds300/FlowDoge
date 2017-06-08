@@ -12,8 +12,7 @@
     "react-native-scripts": "0.0.30",
     "react-native-typescript-transformer": "^1.0.7",
     "react-test-renderer": "16.0.0-alpha.6",
-    "tslint": "^5.4.2",
-    "typescript": "^2.3.4"
+    "tslint": "^5.4.2"
   },
   "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
   "scripts": {
@@ -43,6 +42,7 @@
     "react": "16.0.0-alpha.6",
     "react-native": "^0.44.0",
     "react-navigation": "^1.0.0-beta.11",
-    "ts-node": "^3.0.6"
+    "ts-node": "^3.0.6",
+    "typescript": "^2.3.4"
   }
 }
