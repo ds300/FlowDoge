@@ -1,7 +1,6 @@
 import { types, IType } from "mobx-state-tree"
 import Expo from "expo"
 import qs from "query-string"
-import { Linking } from "react-native"
 import { stringEnum, Effect, log } from "../utils"
 import { client_id, redirect_uri, apiUrl } from "../config"
 import { join } from "path"
@@ -29,6 +28,7 @@ const AuthStore = types.model(
   {
     oauthResult: types.maybe(OAuthResult),
     state: types.optional(types.string as IType<State, State>, "idle"),
+    loginError: types.maybe(types.string),
     effects: types.array(AuthEffect),
     get isLoggedIn() {
       return !!this.oauthResult
@@ -55,10 +55,6 @@ const AuthStore = types.model(
       this.state = State.idle
     },
 
-    browserClosedManually() {
-      this.state = State.idle
-    },
-
     tokenResultCompleted(result: OAuthResult) {
       this.oauthResult = result
       this.state = State.idle
@@ -78,26 +74,16 @@ export const initialState: typeof AuthStore.SnapshotType = {
 export const effectHandlers = {
   [OpenBrowser.type](_: any, store: AuthStore) {
     const state = cryptoRandom(32)
-    const redirectHandler = (ev: { url: string }) =>
-      store.appRedirectIntercepted(ev.url)
-    Linking.addEventListener("url", redirectHandler)
-    Expo.WebBrowser
-      .openBrowserAsync(
-        "https://api.flowdock.com/oauth/authorize?" +
-          qs.stringify({
-            client_id,
-            response_type: "code",
-            redirect_uri,
-            state,
-            scope: "flow private offline_access profile",
-          }),
-      )
-      .then(({ type }) => {
-        Linking.removeEventListener("url", redirectHandler)
-        if (type === "cancelled") {
-          store.browserClosedManually()
-        }
-      })
+    Expo.WebBrowser.openBrowserAsync(
+      "https://api.flowdock.com/oauth/authorize?" +
+        qs.stringify({
+          client_id,
+          response_type: "code",
+          redirect_uri,
+          state,
+          scope: "flow private offline_access profile",
+        }),
+    )
     fetch(
       join(apiUrl, "token") +
         "?" +
@@ -105,6 +91,10 @@ export const effectHandlers = {
           state,
         }),
     )
+      .then(res => res.json())
+      .then(token => {
+        store.tokenResultCompleted(token)
+      })
   },
 }
 
