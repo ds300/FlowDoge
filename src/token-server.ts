@@ -141,7 +141,6 @@ app.get("/token", (req, res) => {
     res.status(400)
     res.end()
   }
-  res.send("Hello World!")
 })
 
 app.get("/login", (req, res) => {
