@@ -171,8 +171,17 @@ app.get("/login", (req, res) => {
   })
     .then(response => {
       if (response.status === 200) {
-        response.json().then(token => handleAccessToken(state, token))
-        res.end("Thanks for logging into Flowdoge. You can close this now.")
+        response
+          .text()
+          .then(text => {
+            handleAccessToken(state, qs.parse(text))
+            res.end("Thanks for logging into Flowdoge. You can close this now.")
+          })
+          .catch(err => {
+            /* tslint:disable-next-line */
+            console.error(err)
+            res.end("Couldn't parse response from Flowdock :/")
+          })
       } else {
         res.end(
           "Errmmm, not sure what happened, but that didn't work. Maybe try again?",
