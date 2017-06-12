@@ -159,6 +159,15 @@ app.get("/login", (req, res) => {
     return
   }
 
+  /* tslint:disable-next-line */
+  console.log("req", {
+    client_id: env.CLIENT_ID,
+    client_secret: env.CLIENT_SECRET,
+    code,
+    redirect_uri: env.REDIRECT_URI,
+    grant_type: "authorization_code",
+  })
+
   fetch("https://api.flowdock.com/oauth/token", {
     method: "POST",
     body: qs.stringify({
@@ -168,6 +177,9 @@ app.get("/login", (req, res) => {
       redirect_uri: env.REDIRECT_URI,
       grant_type: "authorization_code",
     }),
+    headers: {
+      Accept: "application/json",
+    },
   })
     .then(response => {
       if (response.status === 200) {
@@ -176,7 +188,7 @@ app.get("/login", (req, res) => {
           .then(text => {
             /* tslint:disable-next-line */
             console.error(text)
-            handleAccessToken(state, qs.parse(text))
+            handleAccessToken(state, JSON.parse(text))
             res.end("Thanks for logging into Flowdoge. You can close this now.")
           })
           .catch(err => {
