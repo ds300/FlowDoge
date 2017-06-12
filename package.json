@@ -4,6 +4,7 @@
 	"private": true,
 	"scripts": {
 		"start": "node node_modules/react-native/local-cli/cli.js start",
+		"token-server": "ts-node --compilerOptions '{\"module\":\"commonjs\"}' src/token-server.ts",
 		"test": "jest"
 	},
 	"dependencies": {
