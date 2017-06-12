@@ -1,10 +1,9 @@
 import { types, IType } from "mobx-state-tree"
-import Expo from "expo"
 import qs from "query-string"
-import { stringEnum, Effect, log } from "../utils"
+import { log, stringEnum, Effect, unsecureRandomString } from "../utils"
 import { client_id, redirect_uri, apiUrl } from "../config"
 import { join } from "path"
-import cryptoRandom from "crypto-random-string"
+import { Linking } from "react-native"
 
 const State = stringEnum("idle", "awaiting_code", "awaiting_token")
 type State = keyof typeof State
@@ -20,8 +19,8 @@ type OAuthResult = typeof OAuthResult.Type
 
 const OpenBrowser = Effect("auth_OpenBrowser")
 
-const AuthEffect = types.union(OpenBrowser, OpenBrowser)
-type AuthEffect = typeof AuthEffect.Type
+// const AuthEffect = types.union(OpenBrowser, OpenBrowser)
+// type AuthEffect = typeof AuthEffect.Type
 
 const AuthStore = types.model(
   "AuthStore",
@@ -29,7 +28,7 @@ const AuthStore = types.model(
     oauthResult: types.maybe(OAuthResult),
     state: types.optional(types.string as IType<State, State>, "idle"),
     loginError: types.maybe(types.string),
-    effects: types.array(AuthEffect),
+    effects: types.array(OpenBrowser),
     get isLoggedIn() {
       return !!this.oauthResult
     },
@@ -73,8 +72,8 @@ export const initialState: typeof AuthStore.SnapshotType = {
 
 export const effectHandlers = {
   [OpenBrowser.type](_: any, store: AuthStore) {
-    const state = cryptoRandom(32)
-    Expo.WebBrowser.openBrowserAsync(
+    const state = unsecureRandomString(32)
+    Linking.openURL(
       "https://api.flowdock.com/oauth/authorize?" +
         qs.stringify({
           client_id,
@@ -91,9 +90,24 @@ export const effectHandlers = {
           state,
         }),
     )
-      .then(res => res.json())
-      .then(token => {
-        store.tokenResultCompleted(token)
+      .then(res => {
+        if (res.status === 200) {
+          res
+            .json()
+            .then(token => {
+              store.tokenResultCompleted(token)
+            })
+            .catch(err => {
+              log.info("token request was bad")
+              log.error(err)
+            })
+        } else {
+          log.error("token request failed", res.status, res.statusText)
+        }
+      })
+      .catch(err => {
+        log.info("token request failed")
+        log.error(err)
       })
   },
 }

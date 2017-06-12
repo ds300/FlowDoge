@@ -18,7 +18,7 @@
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
-    "outDir": "build",
+    "noEmit": true,
     "emitDecoratorMetadata": true
   },
   "exclude": [

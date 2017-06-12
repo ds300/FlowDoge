@@ -1,48 +1,43 @@
 {
-  "name": "FlowDoge",
-  "version": "0.1.0",
-  "private": true,
-  "devDependencies": {
-    "@types/prop-types": "^15.5.1",
-    "@types/query-string": "^4.3.1",
-    "@types/react": "^15.0.26",
-    "@types/react-native": "^0.44.8",
-    "jest-expo": "~1.0.1",
-    "prettier": "^1.4.2",
-    "react-native-scripts": "0.0.30",
-    "react-native-typescript-transformer": "^1.0.7",
-    "react-test-renderer": "16.0.0-alpha.6",
-    "tslint": "^5.4.2"
-  },
-  "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
-  "scripts": {
-    "start": "react-native-scripts start",
-    "token-server": "ts-node --compilerOptions '{\"module\":\"commonjs\"}' src/token-server.ts",
-    "eject": "react-native-scripts eject",
-    "android": "react-native-scripts android",
-    "ios": "react-native-scripts ios",
-    "test": "node node_modules/jest/bin/jest.js --watch"
-  },
-  "jest": {
-    "preset": "jest-expo"
-  },
-  "dependencies": {
-    "@types/express": "^4.0.35",
-    "crypto-random-string": "^1.0.0",
-    "expo": "^17.0.0",
-    "express": "^4.15.3",
-    "glamorous-native": "^1.1.0",
-    "io-ts": "^0.4.0",
-    "mobx": "^3.1.11",
-    "mobx-react": "^4.2.1",
-    "mobx-state-tree": "^0.6.3",
-    "node-fetch": "^1.7.1",
-    "prop-types": "^15.5.10",
-    "query-string": "^4.3.4",
-    "react": "16.0.0-alpha.6",
-    "react-native": "^0.44.0",
-    "react-navigation": "^1.0.0-beta.11",
-    "ts-node": "^3.0.6",
-    "typescript": "^2.3.4"
-  }
+	"name": "FlowDoge",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"start": "node node_modules/react-native/local-cli/cli.js start",
+		"test": "jest"
+	},
+	"dependencies": {
+		"@types/express": "^4.0.35",
+		"express": "^4.15.3",
+		"glamorous-native": "^1.1.0",
+		"io-ts": "^0.4.0",
+		"mobx": "^3.1.14",
+		"mobx-react": "^4.2.1",
+		"mobx-state-tree": "^0.7.0",
+		"node-fetch": "^1.7.1",
+		"path": "^0.12.7",
+		"prop-types": "^15.5.10",
+		"query-string": "^4.3.4",
+		"react": "16.0.0-alpha.12",
+		"react-native": "^0.45.1",
+		"react-navigation": "^1.0.0-beta.11",
+		"ts-node": "^3.0.6",
+		"typescript": "^2.3.4"
+	},
+	"devDependencies": {
+		"@types/prop-types": "^15.5.1",
+		"@types/query-string": "^4.3.1",
+		"@types/react": "^15.0.27",
+		"@types/react-native": "^0.44.10",
+		"babel-jest": "20.0.3",
+		"babel-preset-react-native": "1.9.2",
+		"jest": "20.0.4",
+		"prettier": "^1.4.4",
+		"react-native-scripts": "^0.0.31",
+		"react-native-typescript-transformer": "^1.0.9",
+		"tslint": "^5.4.3"
+	},
+	"jest": {
+		"preset": "react-native"
+	}
 }

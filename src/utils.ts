@@ -64,6 +64,19 @@ export function runEffects(
   })
 }
 
+const chars = "abcdefghijklmnopqrstuvwxyz0123456789"
+
+export function unsecureRandomString(length: number = 3): string {
+  if (length < 0 || length > 2000000) {
+    throw new Error(`What you is doing. Number bad: ${length}`)
+  }
+  let result = ""
+  for (let i = 0; i < length; i++) {
+    result += chars[Math.floor(Math.random() * chars.length)]
+  }
+  return result
+}
+
 export interface Log {
   log: typeof console.error
   error: typeof console.error

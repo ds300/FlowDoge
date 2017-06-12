@@ -1,6 +1,1 @@
-export const apiUrl = "https://somethingsomethingsomething.herokuapp.com/"
-
-export const redirect_uri = apiUrl + "/login"
-
-export const client_id =
-  "5c025f49c90296eac925216d39b9e84bf2a5126e652ba1819c870cf1c4da4736"
+export { apiUrl, redirect_uri, client_id } from "./.config"

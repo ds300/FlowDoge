@@ -3,7 +3,7 @@ import React from "react"
 import AppStore, { bootstrap, create } from "./AppStore"
 import PropTypes from "prop-types"
 import { observer } from "mobx-react"
-import { ActivityIndicator } from "react-native"
+import { AppRegistry, ActivityIndicator } from "react-native"
 
 @observer
 class App extends React.Component<{}, {}> {
@@ -40,6 +40,8 @@ class App extends React.Component<{}, {}> {
     )
   }
 }
+
+AppRegistry.registerComponent("FlowDoge", () => App)
 
 export default App
 

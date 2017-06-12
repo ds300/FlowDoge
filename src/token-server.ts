@@ -132,7 +132,7 @@ function handleAccessToken(state: string, token: AccessToken): void {
 }
 
 app.get("/token", (req, res) => {
-  const { state } = req.params
+  const { state } = req.query
   if (typeof state === "string" && state.match(/[a-z0-9]{32}/i)) {
     addTokenRequest(state, res, null)
   } else {
@@ -144,7 +144,7 @@ app.get("/token", (req, res) => {
 })
 
 app.get("/login", (req, res) => {
-  const { state, code } = req.params as {
+  const { state, code } = req.query as {
     state: string | undefined
     code: string | undefined
   }
