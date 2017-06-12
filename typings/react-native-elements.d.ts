@@ -11,4 +11,12 @@ declare module "react-native-elements" {
       backgroundColor?: string
     }
   >
+
+  export const SideMenu: React.ComponentClass<
+    RN.TouchableOpacityProperties & {
+      isOpen: boolean
+      onChange(isOpen: boolean): void
+      menu: JSX.Element
+    }
+  >
 }

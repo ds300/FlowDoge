@@ -3,9 +3,10 @@ import React from "react"
 import AppStore, { bootstrap, create } from "./AppStore"
 import PropTypes from "prop-types"
 import { observer } from "mobx-react"
-import { AppRegistry, ActivityIndicator } from "react-native"
+import { AppRegistry, ActivityIndicator, View } from "react-native"
 import AuthView from "./auth/AuthView"
 import * as colors from "./colors"
+import { SideMenu, List, ListItem } from "react-native-elements"
 
 @observer
 class App extends React.Component<{}, {}> {
@@ -47,9 +48,35 @@ class App extends React.Component<{}, {}> {
   }
 
   render() {
+    const users = this.app.user.users
+      .entries()
+      .slice(0, 5)
+      .map(([id, user]) =>
+        <ListItem
+          roundAvatar
+          onPress={() => console.log("Pressed")}
+          avatar={user.avatar}
+          key={id}
+          title={user.name}
+          subtitle={user.email}
+        />,
+      )
+
+    const MenuComponent = (
+      <View style={{ flex: 1, backgroundColor: "#ededed", paddingTop: 50 }}>
+        <List containerStyle={{ marginBottom: 20 }}>
+          {users}
+        </List>
+      </View>
+    )
+
     if (this.app.auth.isLoggedIn || !this.app.auth.isIdle) {
       if (this.app.user.isReady) {
-        return <Container><Info>wow such flow</Info></Container>
+        return (
+          <SideMenu isOpen={true} onChange={_ => {}} menu={MenuComponent}>
+            <Container><Info>wow such flow</Info></Container>
+          </SideMenu>
+        )
       } else {
         return (
           <Container>
@@ -84,6 +111,7 @@ const Info = glam.text({
 
 const Container = glam.view({
   flex: 1,
+  backgroundColor: "white",
   alignItems: "center",
   justifyContent: "center",
 })
