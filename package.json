@@ -13,6 +13,7 @@
 	"dependencies": {
 		"@types/express": "^4.0.35",
 		"@types/node-fetch": "^1.6.7",
+		"@types/query-string": "^4.3.1",
 		"express": "^4.15.3",
 		"glamorous-native": "^1.1.0",
 		"io-ts": "^0.4.0",
@@ -31,7 +32,6 @@
 	},
 	"devDependencies": {
 		"@types/prop-types": "^15.5.1",
-		"@types/query-string": "^4.3.1",
 		"@types/react": "^15.0.27",
 		"@types/react-native": "^0.44.10",
 		"babel-jest": "20.0.3",
