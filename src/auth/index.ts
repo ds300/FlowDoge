@@ -3,7 +3,7 @@ import qs from "query-string"
 import { log, stringEnum, Effect, unsecureRandomString } from "../utils"
 import { client_id, redirect_uri, apiUrl } from "../config"
 import { join } from "path"
-import { Linking } from "react-native"
+import { Linking, AppState } from "react-native"
 
 const State = stringEnum("idle", "awaiting_code", "awaiting_token")
 type State = keyof typeof State
@@ -19,8 +19,13 @@ type OAuthResult = typeof OAuthResult.Type
 
 const OpenBrowser = Effect("auth_OpenBrowser")
 
-// const AuthEffect = types.union(OpenBrowser, OpenBrowser)
-// type AuthEffect = typeof AuthEffect.Type
+const FetchToken = Effect("auth_FetchToken", {
+  state: types.string,
+})
+type FetchToken = typeof FetchToken.Type
+
+const AuthEffect = types.union(OpenBrowser, FetchToken)
+type AuthEffect = typeof AuthEffect.Type
 
 const AuthStore = types.model(
   "AuthStore",
@@ -28,7 +33,7 @@ const AuthStore = types.model(
     oauthResult: types.maybe(OAuthResult),
     state: types.optional(types.string as IType<State, State>, "idle"),
     loginError: types.maybe(types.string),
-    effects: types.array(OpenBrowser),
+    effects: types.array(AuthEffect),
     get isLoggedIn() {
       return !!this.oauthResult
     },
@@ -58,6 +63,10 @@ const AuthStore = types.model(
       this.oauthResult = result
       this.state = State.idle
     },
+
+    appRegainedFocusAfterFlowdockLogin(state: string) {
+      this.effects.push(FetchToken.create({ state }))
+    },
   },
 )
 
@@ -71,18 +80,7 @@ export const initialState: typeof AuthStore.SnapshotType = {
 }
 
 export const effectHandlers = {
-  [OpenBrowser.type](_: any, store: AuthStore) {
-    const state = unsecureRandomString(32)
-    Linking.openURL(
-      "https://api.flowdock.com/oauth/authorize?" +
-        qs.stringify({
-          client_id,
-          response_type: "code",
-          redirect_uri,
-          state,
-          scope: "flow private offline_access profile",
-        }),
-    )
+  [FetchToken.type]({ props: { state } }: FetchToken, store: AuthStore) {
     fetch(
       join(apiUrl, "token") +
         "?" +
@@ -109,6 +107,27 @@ export const effectHandlers = {
         log.info("token request failed")
         log.error(err)
       })
+  },
+  [OpenBrowser.type](_: any, store: AuthStore) {
+    const state = unsecureRandomString(32)
+    Linking.openURL(
+      "https://api.flowdock.com/oauth/authorize?" +
+        qs.stringify({
+          client_id,
+          response_type: "code",
+          redirect_uri,
+          state,
+          scope: "flow private offline_access profile",
+        }),
+    )
+
+    function appStateListener(appState: string) {
+      if (appState === "active") {
+        store.appRegainedFocusAfterFlowdockLogin(state)
+        AppState.removeEventListener("change", appStateListener)
+      }
+    }
+    AppState.addEventListener("change", appStateListener)
   },
 }
 
