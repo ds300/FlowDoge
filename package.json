@@ -16,6 +16,7 @@
 		"@types/query-string": "^4.3.1",
 		"express": "^4.15.3",
 		"glamorous-native": "^1.1.0",
+		"immutable": "4.0.0-rc.2",
 		"io-ts": "^0.4.0",
 		"mobx": "^3.1.14",
 		"mobx-react": "^4.2.1",
