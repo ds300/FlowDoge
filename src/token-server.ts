@@ -168,9 +168,6 @@ app.get("/login", (req, res) => {
       redirect_uri: env.REDIRECT_URI,
       grant_type: "authorization_code",
     }),
-    headers: {
-      Accept: "application/json",
-    },
   })
     .then(response => {
       if (response.status === 200) {
