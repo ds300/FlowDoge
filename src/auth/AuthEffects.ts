@@ -17,7 +17,7 @@ export type FetchToken = typeof FetchToken.Type
 export const AuthEffect = types.union(OpenBrowser, FetchToken)
 export type AuthEffect = typeof AuthEffect.Type
 
-export default {
+export const authEffectsHandlers = {
   [FetchToken.type]({ props: { state } }: FetchToken, store: AuthStore) {
     fetch(
       join(apiUrl, "token") +
@@ -68,3 +68,5 @@ export default {
     AppState.addEventListener("change", appStateListener)
   },
 }
+
+export default authEffectsHandlers

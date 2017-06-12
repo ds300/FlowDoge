@@ -4,6 +4,7 @@ import AppStore, { bootstrap, create } from "./AppStore"
 import PropTypes from "prop-types"
 import { observer } from "mobx-react"
 import { AppRegistry, ActivityIndicator } from "react-native"
+import AuthView from "./auth/AuthView"
 
 @observer
 class App extends React.Component<{}, {}> {
@@ -24,19 +25,20 @@ class App extends React.Component<{}, {}> {
 
   render() {
     return (
-      <Container>
-        {!this.app.auth.isIdle && <ActivityIndicator animating={true} />}
-        {this.app.auth.isIdle &&
-          this.app.auth.isLoggedIn &&
-          <Info>Hooray you are logged in</Info>}
-        {this.app.auth.isIdle &&
-          !this.app.auth.isLoggedIn &&
-          <Button>
-            <ButtonLabel onPress={() => this.app.auth.logIn()}>
-              Do a log in
-            </ButtonLabel>
-          </Button>}
-      </Container>
+      // <Container>
+      //   {/*{!this.app.auth.isIdle && <ActivityIndicator animating={true} />}
+      //   {this.app.auth.isIdle &&
+      //     this.app.auth.isLoggedIn &&
+      //     <Info>Hooray you are logged in</Info>}
+      //   {this.app.auth.isIdle &&
+      //     !this.app.auth.isLoggedIn &&
+      //     <Button>
+      //       <ButtonLabel onPress={() => this.app.auth.logIn()}>
+      //         Do a log in
+      //       </ButtonLabel>
+      //     </Button>}*/}
+      // </Container>
+      <AuthView isIdle={true} loginFailed={false} />
     )
   }
 }

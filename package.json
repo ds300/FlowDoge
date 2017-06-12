@@ -27,6 +27,8 @@
 		"query-string": "^4.3.4",
 		"react": "16.0.0-alpha.12",
 		"react-native": "^0.45.1",
+		"react-native-elements": "^0.12.2",
+		"react-native-vector-icons": "^4.2.0",
 		"react-navigation": "^1.0.0-beta.11",
 		"ts-node": "^3.0.6",
 		"typescript": "^2.3.4"
@@ -42,6 +44,11 @@
 		"react-native-scripts": "^0.0.31",
 		"react-native-typescript-transformer": "^1.0.9",
 		"tslint": "^5.4.3"
+	},
+	"rnpm": {
+		"assets": [
+			"./fonts/"
+		]
 	},
 	"jest": {
 		"preset": "react-native"
