@@ -1,5 +1,6 @@
 import { env } from "process"
 import * as express from "express"
+import fetch from "node-fetch"
 
 if (!env.PORT) {
   throw new Error("no PORT environment variable found")
