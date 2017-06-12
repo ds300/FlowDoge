@@ -1,6 +1,7 @@
 import { env } from "process"
 import * as express from "express"
 import fetch from "node-fetch"
+import * as qs from "query-string"
 
 if (!env.PORT) {
   throw new Error("no PORT environment variable found")
@@ -160,7 +161,7 @@ app.get("/login", (req, res) => {
 
   fetch("https://api.flowdock.com/oauth/token", {
     method: "POST",
-    body: JSON.stringify({
+    body: qs.stringify({
       client_id: env.CLIENT_ID,
       client_secret: env.CLIENT_SECRET,
       code,
@@ -169,7 +170,6 @@ app.get("/login", (req, res) => {
     }),
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json",
     },
   })
     .then(response => {
