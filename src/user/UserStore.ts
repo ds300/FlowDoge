@@ -77,7 +77,6 @@ export const UserStore = types.model(
       userList.forEach(user => {
         this.users.set(user.id.toString(), user)
       })
-      this.continueBootstrapSequence()
     },
     organizationsRetrieved(
       organizationList: Array<typeof Organization.SnapshotType>,
@@ -86,6 +85,7 @@ export const UserStore = types.model(
         [key: string]: typeof Organization.SnapshotType
       } = {}
       organizationList.forEach(organization => {
+        this.usersRetrieved(organization.users)
         organizationMap[organization.id] = organization
       })
       this.organizations = organizationMap as any
