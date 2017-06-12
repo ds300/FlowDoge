@@ -118,7 +118,7 @@ function addTokenRequest(
 function handleAccessToken(state: string, token: AccessToken): void {
   const maybeTokenRequest = tokenRequests[state]
 
-  if (maybeTokenRequest !== null && maybeTokenRequest.response !== null) {
+  if (maybeTokenRequest && maybeTokenRequest.response !== null) {
     try {
       maybeTokenRequest.response.status(200)
       maybeTokenRequest.response.header("Content-type", "application/json")
