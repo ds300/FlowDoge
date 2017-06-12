@@ -13,11 +13,13 @@ export default class AuthView extends React.Component<
   {
     dogeRotation: Animated.Value
     dogeSize: Animated.Value
+    opacity: Animated.Value
   }
 > {
   state = {
     dogeRotation: new Animated.Value(0),
     dogeSize: new Animated.Value(0),
+    opacity: new Animated.Value(0),
   }
   componentDidMount() {
     Animated.spring(this.state.dogeRotation, {
@@ -25,6 +27,9 @@ export default class AuthView extends React.Component<
     }).start()
     Animated.spring(this.state.dogeSize, {
       toValue: 200,
+    }).start()
+    Animated.timing(this.state.opacity, {
+      toValue: 1,
     }).start()
   }
   render() {
@@ -43,17 +48,21 @@ export default class AuthView extends React.Component<
           <LogoContainer>
             <Animated.Image source={logo} style={logoStyle} />
           </LogoContainer>
-          <Title>FlowDoge</Title>
         </Centered>
-        <Button
-          title="Sign In"
-          icon={{ name: "lock-open" }}
-          iconRight
-          raised
-          backgroundColor={colors.primary}
-          onPress={this.props.onSignIn}
-        />
-        {this.props.loginFailed && <Info>Couldn't log in. Try again.</Info>}
+        <Animated.View style={{ opacity: this.state.opacity }}>
+          <Centered>
+            <Title>FlowDoge</Title>
+          </Centered>
+          <Button
+            title="Sign In"
+            icon={{ name: "lock-open" }}
+            iconRight
+            raised
+            backgroundColor={colors.primary}
+            onPress={this.props.onSignIn}
+          />
+          {this.props.loginFailed && <Info>Couldn't log in. Try again.</Info>}
+        </Animated.View>
       </Container>
     )
   }
