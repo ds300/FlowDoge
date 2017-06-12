@@ -52,11 +52,15 @@ export function runEffects(
   autorun(() => {
     if (store.effects.length) {
       store.effects.forEach(eff => {
-        log.info("running effect", eff.type)
-        try {
-          effectsExecutors[eff.type](eff, store, appStore)
-        } catch (e) {
-          log.error(e)
+        if (!effectsExecutors[eff.type]) {
+          log.error("Unsupported effect type: ", eff.type)
+        } else {
+          log.info("running effect", eff.type)
+          try {
+            effectsExecutors[eff.type](eff, store, appStore)
+          } catch (e) {
+            log.error(e)
+          }
         }
       })
       store.effects = []
@@ -75,6 +79,24 @@ export function unsecureRandomString(length: number = 3): string {
     result += chars[Math.floor(Math.random() * chars.length)]
   }
   return result
+}
+
+export function reportCriticalError(err: any) {
+  if (__DEV__) {
+    /* tslint:disable-next-line */
+    console.error(err)
+  } else {
+    // TODO: error reporting
+  }
+}
+
+export function reportWarning(err: any) {
+  if (__DEV__) {
+    /* tslint:disable-next-line */
+    console.error(err)
+  } else {
+    // TODO: error reporting
+  }
 }
 
 export interface Log {

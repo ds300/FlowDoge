@@ -3,10 +3,10 @@ import { Animated } from "react-native"
 import glam from "glamorous-native"
 import { logo } from "../images"
 import { Button } from "react-native-elements"
+import * as colors from "../colors"
 
 export default class AuthView extends React.Component<
   {
-    isIdle: boolean
     loginFailed: boolean
     onSignIn(): void
   },
@@ -50,7 +50,7 @@ export default class AuthView extends React.Component<
           icon={{ name: "lock-open" }}
           iconRight
           raised
-          backgroundColor="#00a453"
+          backgroundColor={colors.primary}
           onPress={this.props.onSignIn}
         />
         {this.props.loginFailed && <Info>Couldn't log in. Try again.</Info>}

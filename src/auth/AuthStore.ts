@@ -5,24 +5,27 @@ import { stringEnum } from "../utils"
 const State = stringEnum("idle", "awaiting_code", "awaiting_token")
 type State = keyof typeof State
 
-const OAuthResult = types.model("auth_OAuthResult", {
+export const AccessToken = types.model("auth_OAuthResult", {
   access_token: types.string,
   refresh_token: types.string,
   expires_in: types.number,
   token_type: types.string,
 })
 
-type OAuthResult = typeof OAuthResult.Type
+export type AccessToken = typeof AccessToken.Type
 
-const AuthStore = types.model(
+export const AuthStore = types.model(
   "AuthStore",
   {
-    oauthResult: types.maybe(OAuthResult),
+    accessToken: types.maybe(AccessToken),
     state: types.optional(types.string as IType<State, State>, "idle"),
     loginError: types.maybe(types.string),
     effects: types.array(AuthEffect),
+    get loginFailed() {
+      return this.loginError !== null
+    },
     get isLoggedIn() {
-      return !!this.oauthResult
+      return !!this.accessToken
     },
     get isIdle() {
       return this.state === State.idle
@@ -35,7 +38,7 @@ const AuthStore = types.model(
     logIn() {
       this.loginError = null
       this.state = State.awaiting_code
-      this.effects.push(OpenBrowser.create({ type: "auth_OpenBrowser" }))
+      this.effects.push(OpenBrowser.create())
     },
 
     /**
@@ -46,8 +49,9 @@ const AuthStore = types.model(
       this.state = State.idle
     },
 
-    tokenResultCompleted(result: OAuthResult) {
-      this.oauthResult = result
+    tokenResultCompleted(result: AccessToken) {
+      this.loginError = null
+      this.accessToken = result
       this.state = State.idle
     },
 
@@ -57,10 +61,10 @@ const AuthStore = types.model(
   },
 )
 
-type AuthStore = typeof AuthStore.Type
+export type AuthStore = typeof AuthStore.Type
 
 export const initialState: typeof AuthStore.SnapshotType = {
-  oauthResult: null,
+  accessToken: null,
   state: "idle",
   loginError: null,
   effects: [],
