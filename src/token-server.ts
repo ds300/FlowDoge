@@ -174,6 +174,8 @@ app.get("/login", (req, res) => {
         response
           .text()
           .then(text => {
+            /* tslint:disable-next-line */
+            console.error(text)
             handleAccessToken(state, qs.parse(text))
             res.end("Thanks for logging into Flowdoge. You can close this now.")
           })
