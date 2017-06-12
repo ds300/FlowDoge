@@ -1,7 +1,5 @@
-import AuthStore, {
-  effectHandlers,
-  initialState as authInitialState,
-} from "./auth"
+import AuthStore, { initialState as authInitialState } from "./auth/AuthStore"
+import authEffectHandlers from "./auth/AuthEffects"
 import { types } from "mobx-state-tree"
 import { runEffects } from "./utils"
 
@@ -22,5 +20,5 @@ export function create() {
 }
 
 export function bootstrap(store: AppStore) {
-  runEffects(store, store.auth, effectHandlers)
+  runEffects(store, store.auth, authEffectHandlers)
 }
