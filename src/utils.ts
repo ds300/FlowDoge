@@ -1,4 +1,4 @@
-import { types, IType } from "mobx-state-tree"
+import { types, IType, getSnapshot } from "mobx-state-tree"
 import { autorun } from "mobx"
 import AppStore from "./AppStore"
 
@@ -19,11 +19,12 @@ export function Effect<Type extends string, T>(
   create(props: T): { type: Type; props: T }
 } & { type: Type }
 export function Effect() {
+  global.effectName = arguments[0]
   const Eff = arguments.length === 1
     ? types.model(arguments[0], { type: types.string })
     : types.model(arguments[0], {
         type: types.string,
-        props: types.model(arguments[1]),
+        props: types.model(arguments[0] + "_props", arguments[1]),
       })
   Object.assign(Eff, { type: arguments[0] })
   const type = arguments[0]

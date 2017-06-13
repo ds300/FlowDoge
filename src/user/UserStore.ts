@@ -41,8 +41,11 @@ export const UserStore = types.model(
   "UserStore",
   {
     profile: types.union(User, types.literal(null)),
+    profileLastFetched: types.number,
     flows: types.map(Flow),
+    flowsLastFetched: types.number,
     organizations: types.map(Organization),
+    organizationsLastFetched: types.number,
     users: types.map(User),
     effects: types.array(UserEffect),
     enqueuedBootstrapEffects: types.array(UserEffect),
@@ -110,8 +113,11 @@ export type UserStore = typeof UserStore.Type
 
 export const initialState: typeof UserStore.SnapshotType = {
   profile: null,
+  profileLastFetched: 0,
   flows: {},
+  flowsLastFetched: 0,
   organizations: {},
+  organizationsLastFetched: 0,
   users: {},
   effects: [],
   currentBootstrapEffect: null,

@@ -1,6 +1,9 @@
-import { types, IType } from "mobx-state-tree"
-import { AuthEffect, OpenBrowser, FetchToken } from "./AuthEffects"
+import { types, IType, applySnapshot } from "mobx-state-tree"
+import { AuthEffect } from "./AuthEffects"
+import * as Eff from "./AuthEffects"
 import { stringEnum } from "../utils"
+
+export const PERSISTENCE_KEY = "flowdoge.auth"
 
 const State = stringEnum("idle", "awaiting_code", "awaiting_token")
 type State = keyof typeof State
@@ -38,7 +41,11 @@ export const AuthStore = types.model(
     logIn() {
       this.loginError = null
       this.state = State.awaiting_code
-      this.effects.push(OpenBrowser.create())
+      this.effects.push(Eff.OpenBrowser.create())
+    },
+
+    logOut() {
+      this.effects.push(Eff.ClearAllState.create())
     },
 
     /**
@@ -53,10 +60,15 @@ export const AuthStore = types.model(
       this.loginError = null
       this.accessToken = result
       this.state = State.idle
+      this.effects.push(Eff.PersistAuthState.create())
     },
 
     appRegainedFocusAfterFlowdockLogin(state: string) {
-      this.effects.push(FetchToken.create({ state }))
+      this.effects.push(Eff.FetchToken.create({ state }))
+    },
+
+    applySnapshot(snapShot: any) {
+      applySnapshot(this, snapShot)
     },
   },
 )

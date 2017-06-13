@@ -7,6 +7,7 @@ import { AppRegistry, ActivityIndicator, View } from "react-native"
 import AuthView from "./auth/AuthView"
 import * as colors from "./colors"
 import { SideMenu, List, ListItem } from "react-native-elements"
+import Main from "./Main"
 
 @observer
 class App extends React.Component<{}, {}> {
@@ -30,15 +31,11 @@ class App extends React.Component<{}, {}> {
     if (currentEffect) {
       switch (currentEffect.type) {
         case "user_fetchCurrentUser":
-          return "Fetching current user data"
-        case "user_fetchAllUsers":
-          return "Fetching all user data"
+          return "Fetching your profile"
         case "user_fetchAllOrganizations":
-          return "Fetching all organization data"
+          return "Fetching your organizations"
         case "user_fetchAllFlows":
-          return "Fetching all flow data"
-        case "user_fetchEnrolledFlows":
-          return "Fetching your enrolled flow data"
+          return "Fetching your flows"
         default:
           return "Please wait"
       }
@@ -72,11 +69,12 @@ class App extends React.Component<{}, {}> {
 
     if (this.app.auth.isLoggedIn || !this.app.auth.isIdle) {
       if (this.app.user.isReady) {
-        return (
-          <SideMenu isOpen={true} onChange={_ => {}} menu={MenuComponent}>
-            <Container><Info>wow such flow</Info></Container>
-          </SideMenu>
-        )
+        return <Main />
+        // return (
+        //   <SideMenu isOpen={true} onChange={_ => {}} menu={MenuComponent}>
+        //     <Container><Info>wow such flow</Info></Container>
+        //   </SideMenu>
+        // )
       } else {
         return (
           <Container>
@@ -93,7 +91,7 @@ class App extends React.Component<{}, {}> {
       return (
         <AuthView
           loginFailed={this.app.auth.loginFailed}
-          onSignIn={this.app.auth.logIn}
+          onSignIn={() => this.app.auth.logIn()}
         />
       )
     }

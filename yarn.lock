@@ -92,11 +92,18 @@
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/@types/query-string/-/query-string-4.3.1.tgz#59ea5c75d425817370158789aa4f6197e5abd987"
 
-"@types/react-native@^0.44.10":
+"@types/react-native@*", "@types/react-native@^0.44.10":
   version "0.44.10"
   resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.44.10.tgz#62f193689aabb7671661ff45f485eb370549a0c4"
   dependencies:
     "@types/react" "*"
+
+"@types/react-navigation@^1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@types/react-navigation/-/react-navigation-1.0.7.tgz#4d93acc44911984176816abe49319b197410643f"
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
 
 "@types/react@*", "@types/react@^15.0.27":
   version "15.0.27"
@@ -3353,13 +3360,9 @@ mobx-react@^4.2.1:
   dependencies:
     hoist-non-react-statics "^1.2.0"
 
-mobx-state-tree@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/mobx-state-tree/-/mobx-state-tree-0.7.0.tgz#0d51efa3f9d27cfa647e7ff4f5027a968ae2cd39"
-
-mobx@^3.1.14:
-  version "3.1.14"
-  resolved "https://registry.yarnpkg.com/mobx/-/mobx-3.1.14.tgz#aa913f0aed051ce609f8f6c37406c0c127fa3a33"
+mobx@^3.1.15:
+  version "3.1.15"
+  resolved "https://registry.yarnpkg.com/mobx/-/mobx-3.1.15.tgz#b2c8831725de2f6f1b8d136e589b674b5b75c35d"
 
 moment@2.x.x, moment@^2.10.6:
   version "2.18.1"

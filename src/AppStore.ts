@@ -1,18 +1,15 @@
-import AuthStore, { initialState as authInitialState } from "./auth/AuthStore"
+import AuthStore, * as Auth from "./auth/AuthStore"
 import UserStore, { initialState as userInitialState } from "./user/UserStore"
 import authEffectHandlers from "./auth/AuthEffects"
 import userEffectHandlers from "./user/UserEffects"
-import { types } from "mobx-state-tree"
+import { types, getSnapshot, onAction } from "mobx-state-tree"
 import { runEffects, log, reportCriticalError } from "./utils"
 import { when } from "mobx"
-
-const initialState = {
-  auth: authInitialState,
-  user: userInitialState,
-}
+import { AsyncStorage } from "react-native"
 
 export const AppStore = types.model(
   {
+    ready: types.boolean,
     auth: AuthStore,
     user: UserStore,
   },
@@ -75,10 +72,17 @@ export const AppStore = types.model(
         attemptFetch()
       })
     },
+    loadFromAsyncStorage() {},
   },
 )
 
 export type AppStore = typeof AppStore.Type
+
+const initialState: typeof AppStore.SnapshotType = {
+  ready: false,
+  auth: Auth.initialState,
+  user: userInitialState,
+}
 
 export default AppStore
 
@@ -89,10 +93,20 @@ export function create() {
 export function bootstrap(store: AppStore) {
   runEffects(store, store.auth, authEffectHandlers)
   runEffects(store, store.user, userEffectHandlers)
+  onAction(store, action => {
+    log.log(action)
+  })
   when(
     () => store.auth.isLoggedIn,
     () => {
       store.user.loggedIn()
     },
   )
+  AsyncStorage.getItem(Auth.PERSISTENCE_KEY, (_err, authSnapshotJson) => {
+    if (!_err && authSnapshotJson) {
+      const authSnapshot = JSON.parse(authSnapshotJson)
+      store.auth.applySnapshot(authSnapshot)
+    } else {
+    }
+  })
 }
